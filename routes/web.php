@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TopicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::get('/topics/{topic}', [TopicController::class, 'show'])->name('topics.show');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
