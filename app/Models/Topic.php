@@ -13,7 +13,9 @@ class Topic extends Model
 
     protected $fillable = [
         'title',
-        'body'
+        'body',
+        'user_id',
+        'category_id'
     ];
 
     protected $casts = [

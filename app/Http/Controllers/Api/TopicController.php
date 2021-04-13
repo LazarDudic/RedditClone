@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Topic;
 use App\Http\Requests\VoteRequest;
+use App\Http\Requests\CreateTopicRequest;
 
 class TopicController extends Controller
 {
     public function index()
     {
-        return Topic::with(['answers', 'user'])->get();
+        return Topic::with(['answers', 'user'])
+            ->latest()
+            ->get();
     }
 
     public function show(Topic $topic)
@@ -31,6 +34,13 @@ class TopicController extends Controller
         ]);
 
         return $topic->refresh();
+    }
+
+    public function store(CreateTopicRequest $request)
+    {
+        $topic = Topic::create($request->validated());
+
+        return $topic->load('user', 'answers');
     }
 
 
