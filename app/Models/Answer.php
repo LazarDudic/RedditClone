@@ -11,7 +11,9 @@ class Answer extends Model
     use HasFactory, Votable;
 
     protected $fillable = [
-        'body'
+        'body',
+        'user_id',
+        'topic_id'
     ];
 
     protected $appends = ['votes_sum'];

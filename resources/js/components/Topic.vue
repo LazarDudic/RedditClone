@@ -21,7 +21,8 @@
             </div>
         </div>
 
-        <answers :answers="topic.answers" :answers-count="topic.answers_count"></answers>
+        <answers :answers="answers" :answers-count="answersCount"></answers>
+        <new-answer @answer-created="updateAnswers" :topic-id="topic.id"></new-answer>
     </div>
 
 </template>
@@ -29,10 +30,23 @@
 <script>
 import Answers from "./Answers";
 import Vote from "./Vote";
+import NewAnswer from "./NewAnswer";
 
 export default {
-    components: {Vote, Answers},
+    components: {Vote, Answers, NewAnswer},
     props: ['topic'],
+    data() {
+        return {
+            answers: this.topic.answers,
+            answersCount: this.topic.answers_count
+        }
+    },
+    methods: {
+        updateAnswers(answer) {
+            this.answers.push(answer);
+            this.answersCount++;
+        }
+    }
 }
 </script>
 

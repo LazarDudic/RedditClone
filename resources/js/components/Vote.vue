@@ -29,7 +29,7 @@ export default {
 
         vote(value) {
             if (! window.authUser) {
-                this.$toast.error('You need to login to vote.', 'Error')
+                this.$toast.warning('You need to login to vote.', 'Warning!')
                 return;
             }
             axios.post(this.url, {
