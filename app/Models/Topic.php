@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Traits\Votable;
 
 class Topic extends Model
 {
-    use HasFactory;
+    use HasFactory, Votable;
 
     protected $fillable = [
         'title',
@@ -20,11 +21,11 @@ class Topic extends Model
         'updated_at' => 'datetime:Y-m-d H:i',
     ];
 
-    protected $appends = ['answers_count'];
+    protected $appends = ['answers_count', 'votes_sum'];
 
     public function answers()
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Answer::class)->with('user');
     }
 
     public function user()

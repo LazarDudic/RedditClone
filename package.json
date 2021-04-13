@@ -24,5 +24,7 @@
         "vue-loader": "^15.9.5",
         "vue-template-compiler": "^2.6.10"
     },
-    "dependencies": {}
+    "dependencies": {
+        "vue-izitoast": "^1.2.1"
+    }
 }

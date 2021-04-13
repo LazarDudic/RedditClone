@@ -1,38 +1,42 @@
 <template>
-    <div class="card">
-        <div class="card-header">Topic</div>
+    <div>
+        <div class="card">
+            <div class="card-header">Topic</div>
 
-        <div class="card-body d-flex">
-            <div class="topic-widget">
-                <i class="fas fa-caret-up fa-3x"></i>
-                <h4>5</h4>
-                <i class="fas fa-caret-down fa-3x"></i><br>
-                <span class="text-secondary">Views 455</span>
+            <div class="card-body d-flex">
+                <div class="topic-widget">
+                    <vote :model="topic" :name="'topic'"></vote>
+                    <span class="text-secondary">Views {{ topic.views }}</span>
 
-            </div>
-            <div>
-                <h4>{{ topic.title }}</h4>
-                <p>{{ topic.body }}</p>
-                <div class="d-flex justify-content-between">
-                    <p>by {{ topic.user.name }}</p>
-                    <p> {{ topic.created_at }}</p>
                 </div>
+                <div>
+                    <h4>{{ topic.title }}</h4>
+                    <p>{{ topic.body }}</p>
+                    <div class="d-flex justify-content-between">
+                        <p>by {{ topic.user.name }}</p>
+                        <p> {{ topic.created_at }}</p>
+                    </div>
+                </div>
+                <hr>
             </div>
-
-            <hr>
         </div>
+
+        <answers :answers="topic.answers" :answers-count="topic.answers_count"></answers>
     </div>
+
 </template>
 
 <script>
+import Answers from "./Answers";
+import Vote from "./Vote";
 
 export default {
-    props: ['topic']
+    components: {Vote, Answers},
+    props: ['topic'],
 }
 </script>
 
 <style>
-
 .topic-widget {
     text-align: center;
     width: 150px;
@@ -43,5 +47,4 @@ export default {
 .topic-widget i {
     font-size: 2.2rem;
 }
-
 </style>
