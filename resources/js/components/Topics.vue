@@ -13,7 +13,7 @@
         <new-topic @topic-created="topicCreated" v-if="createTopic"></new-topic>
 
         <div v-else>
-            <div class="card-body d-flex w-100 pb-0" v-for="topic in topics" :key="topic.id">
+            <div class="card-body d-flex w-100 pb-0" v-for="topic in showTopics" :key="topic.id">
                 <div class="topic-widget">
                     <p>{{ topic.votes_sum }} <br><span>Votes</span></p>
                     <p>{{ topic.answers_count }} <br><span>Answers</span></p>
@@ -43,17 +43,24 @@ export default {
     data() {
         return {
             topics: [],
+            paginate: 5,
             createTopic: false,
             category_id: '',
             url: `/api/topics`
         };
+    },
+    computed: {
+        showTopics() {
+            return this.topics.filter((topic, index) => {
+                return index < this.paginate;
+            });
+        }
     },
     created() {
         this.sortTopics();
 
         eventBus.$on('changeCategory', id => {
             this.category_id = id;
-            this.url = `/api/topics?category_id=${this.category_id}`
             this.sortTopics();
         });
     },
@@ -66,8 +73,11 @@ export default {
                 .catch(err => {
                 })
         },
-        sortTopics(field = 'date', direction = 'desc') {
+        sortTopics() {
+            let field = localStorage.getItem('sortField') ?? 'created_at';
+            let direction = localStorage.getItem('sortDirection') ?? 'desc';
             this.url = `/api/topics?sort_field=${field}&direction=${direction}&category_id=${this.category_id}`;
+
             this.getTopics()
         },
         toggleTopicForm() {

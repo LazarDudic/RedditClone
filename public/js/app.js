@@ -2210,9 +2210,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
+    var _localStorage$getItem, _localStorage$getItem2;
+
     return {
-      direction: 'desc',
-      sortField: 'created_at'
+      direction: (_localStorage$getItem = localStorage.getItem('sortDirection')) !== null && _localStorage$getItem !== void 0 ? _localStorage$getItem : 'desc',
+      sortField: (_localStorage$getItem2 = localStorage.getItem('sortField')) !== null && _localStorage$getItem2 !== void 0 ? _localStorage$getItem2 : 'created_at'
     };
   },
   computed: {
@@ -2229,7 +2231,9 @@ __webpack_require__.r(__webpack_exports__);
       this.sort();
     },
     sort: function sort() {
-      this.$emit('sort', this.sortField, this.direction);
+      window.localStorage.setItem('sortField', this.sortField);
+      window.localStorage.setItem('sortDirection', this.direction);
+      this.$emit('sort');
     }
   }
 });
@@ -2432,33 +2436,44 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       topics: [],
+      paginate: 5,
       createTopic: false,
       category_id: '',
       url: "/api/topics"
     };
   },
+  computed: {
+    showTopics: function showTopics() {
+      var _this = this;
+
+      return this.topics.filter(function (topic, index) {
+        return index < _this.paginate;
+      });
+    }
+  },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     this.sortTopics();
     _event_bus__WEBPACK_IMPORTED_MODULE_2__.default.$on('changeCategory', function (id) {
-      _this.category_id = id;
-      _this.url = "/api/topics?category_id=".concat(_this.category_id);
+      _this2.category_id = id;
 
-      _this.sortTopics();
+      _this2.sortTopics();
     });
   },
   methods: {
     getTopics: function getTopics() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get(this.url).then(function (res) {
-        _this2.topics = res.data;
+        _this3.topics = res.data;
       })["catch"](function (err) {});
     },
     sortTopics: function sortTopics() {
-      var field = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'date';
-      var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'desc';
+      var _localStorage$getItem, _localStorage$getItem2;
+
+      var field = (_localStorage$getItem = localStorage.getItem('sortField')) !== null && _localStorage$getItem !== void 0 ? _localStorage$getItem : 'created_at';
+      var direction = (_localStorage$getItem2 = localStorage.getItem('sortDirection')) !== null && _localStorage$getItem2 !== void 0 ? _localStorage$getItem2 : 'desc';
       this.url = "/api/topics?sort_field=".concat(field, "&direction=").concat(direction, "&category_id=").concat(this.category_id);
       this.getTopics();
     },
@@ -40061,7 +40076,7 @@ var render = function() {
         ? _c("new-topic", { on: { "topic-created": _vm.topicCreated } })
         : _c(
             "div",
-            _vm._l(_vm.topics, function(topic) {
+            _vm._l(_vm.showTopics, function(topic) {
               return _c(
                 "div",
                 { key: topic.id, staticClass: "card-body d-flex w-100 pb-0" },

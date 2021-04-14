@@ -25,8 +25,8 @@
 export default {
     data() {
         return {
-            direction: 'desc',
-            sortField: 'created_at',
+            direction: localStorage.getItem('sortDirection') ?? 'desc',
+            sortField: localStorage.getItem('sortField') ?? 'created_at'
         }
     },
     computed: {
@@ -47,7 +47,10 @@ export default {
             this.sort();
         },
         sort() {
-            this.$emit('sort', this.sortField, this.direction);
+            window.localStorage.setItem('sortField', this.sortField);
+            window.localStorage.setItem('sortDirection', this.direction);
+
+            this.$emit('sort');
         }
     }
 }
