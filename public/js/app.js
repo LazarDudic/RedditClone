@@ -2254,6 +2254,11 @@ __webpack_require__.r(__webpack_exports__);
       edit: false
     };
   },
+  computed: {
+    authenticated: function authenticated() {
+      return this.topic.user_id === window.authUser.id;
+    }
+  },
   methods: {
     newAnswerCreated: function newAnswerCreated(answer) {
       this.answers.push(answer);
@@ -39613,38 +39618,40 @@ var render = function() {
                   _c("p", [_vm._v(" " + _vm._s(_vm.topic.created_at))])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "d-flex" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-warning mr-2",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          _vm.edit = !_vm.edit
-                        }
-                      }
-                    },
-                    [_vm._v("Edit")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "form",
-                    {
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.destroy($event)
-                        }
-                      }
-                    },
-                    [
-                      _c("button", { staticClass: "btn btn-danger" }, [
-                        _vm._v("Delete")
-                      ])
-                    ]
-                  )
-                ])
+                _vm.authenticated
+                  ? _c("div", { staticClass: "d-flex" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-warning mr-2",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.edit = !_vm.edit
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "form",
+                        {
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.destroy($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("button", { staticClass: "btn btn-danger" }, [
+                            _vm._v("Delete")
+                          ])
+                        ]
+                      )
+                    ])
+                  : _vm._e()
               ])
             ])
       ])

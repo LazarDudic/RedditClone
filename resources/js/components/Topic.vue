@@ -27,7 +27,7 @@
                             <p>by {{ topic.user.name }}</p>
                             <p> {{ topic.created_at }}</p>
                         </div>
-                        <div class="d-flex">
+                        <div class="d-flex" v-if="authenticated">
                             <a @click.prevent="edit = !edit" class="btn btn-warning mr-2">Edit</a>
                             <form @submit.prevent="destroy">
                                 <button class="btn btn-danger">Delete</button>
@@ -59,6 +59,11 @@ export default {
             answers: this.topic.answers,
             answersCount: this.topic.answers_count,
             edit: false
+        }
+    },
+    computed: {
+        authenticated() {
+            return this.topic.user_id === window.authUser.id
         }
     },
     methods: {
