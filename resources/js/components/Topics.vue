@@ -66,7 +66,7 @@ export default {
         },
         topicCreated(topic) {
             this.toggleTopicForm()
-            this.topics.push(topic);
+            this.topics.unshift(topic);
         }
     }
 }

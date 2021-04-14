@@ -33,7 +33,6 @@ export default {
                 title: '',
                 body: '',
                 category_id: 1,
-                user_id: window.authUser.id
             },
             categories: [],
             error: {
@@ -51,6 +50,13 @@ export default {
     },
     methods: {
         create() {
+            if (! window.authUser) {
+                this.$toast.warning('You need to login to create a topic.', 'Warning!')
+                return;
+            }
+
+            this.formData.user_id = window.authUser.id;
+
             axios.post('/api/topics', this.formData)
             .then(res => {
                 this.$toast.success('Topic created successfully.', 'Success!');
@@ -58,7 +64,7 @@ export default {
 
                 setTimeout(() => {
                     this.$emit('topic-created', res.data);
-                }, 3000);
+                }, 1500);
             })
             .catch(err => {
                 this.error.title = err.response.data.errors.title

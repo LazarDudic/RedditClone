@@ -37,7 +37,7 @@ export default {
             }
 
             if (this.body.length < 20) {
-                this.error = 'Min number of characters for answer is 20.';
+                this.error = 'Min number of characters for an answer is 20.';
                 return;
             }
             axios.post(this.url, {

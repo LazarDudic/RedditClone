@@ -23,6 +23,10 @@ class Topic extends Model
         'updated_at' => 'datetime:Y-m-d H:i',
     ];
 
+    protected $attributes = [
+        'views' => 0
+    ];
+
     protected $appends = ['answers_count', 'votes_sum'];
 
     public function answers()

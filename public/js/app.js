@@ -1976,7 +1976,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.body.length < 20) {
-        this.error = 'Min number of characters for answer is 20.';
+        this.error = 'Min number of characters for an answer is 20.';
         return;
       }
 
@@ -2039,8 +2039,7 @@ __webpack_require__.r(__webpack_exports__);
       formData: {
         title: '',
         body: '',
-        category_id: 1,
-        user_id: window.authUser.id
+        category_id: 1
       },
       categories: [],
       error: {
@@ -2060,6 +2059,12 @@ __webpack_require__.r(__webpack_exports__);
     create: function create() {
       var _this2 = this;
 
+      if (!window.authUser) {
+        this.$toast.warning('You need to login to create a topic.', 'Warning!');
+        return;
+      }
+
+      this.formData.user_id = window.authUser.id;
       axios.post('/api/topics', this.formData).then(function (res) {
         _this2.$toast.success('Topic created successfully.', 'Success!');
 
@@ -2067,7 +2072,7 @@ __webpack_require__.r(__webpack_exports__);
 
         setTimeout(function () {
           _this2.$emit('topic-created', res.data);
-        }, 3000);
+        }, 1500);
       })["catch"](function (err) {
         _this2.error.title = err.response.data.errors.title ? err.response.data.errors.title[0] : '';
         _this2.error.body = err.response.data.errors.body ? err.response.data.errors.body[0] : '';
@@ -2233,7 +2238,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     topicCreated: function topicCreated(topic) {
       this.toggleTopicForm();
-      this.topics.push(topic);
+      this.topics.unshift(topic);
     }
   }
 });
