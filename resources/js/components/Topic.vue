@@ -1,28 +1,46 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-header">Topic</div>
-
-            <div class="card-body d-flex">
-                <div class="topic-widget">
-                    <vote :model="topic" :name="'topic'"></vote>
-                    <span class="text-secondary">Views {{ topic.views }}</span>
-
-                </div>
+            <div class="card-header d-flex justify-content-between">
                 <div>
-                    <h4>{{ topic.title }}</h4>
-                    <p>{{ topic.body }}</p>
-                    <div class="d-flex justify-content-between">
-                        <p>by {{ topic.user.name }}</p>
-                        <p> {{ topic.created_at }}</p>
+                    {{ edit ? 'Update Topic' : 'Topic' }}
+                </div>
+                <button v-if="edit" @click.prevent="edit = !edit" class="btn btn-outline-secondary btn-sm">
+                    Cancel
+                </button>
+            </div>
+
+            <div class="card-body">
+                <div v-if="edit">
+                    <!-- Edit Topic Component -->
+                    <edit-topic @topic-updated="topicUpdated" :topic="topic"></edit-topic>
+                </div>
+                <div v-else class="d-flex">
+                    <div class="topic-widget">
+                        <vote :model="topic" :name="'topic'"></vote>
+                        <span class="text-secondary">Views {{ topic.views }}</span>
+                    </div>
+                    <div>
+                        <h4>{{ topic.title }}</h4>
+                        <p>{{ topic.body }}</p>
+                        <div class="d-flex justify-content-between">
+                            <p>by {{ topic.user.name }}</p>
+                            <p> {{ topic.created_at }}</p>
+                        </div>
+                        <div class="d-flex">
+                            <a @click.prevent="edit = !edit" class="btn btn-warning mr-2">Edit</a>
+                            <form @submit.prevent="destroy">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <hr>
             </div>
         </div>
-
-        <answers :answers="answers" :answers-count="answersCount"></answers>
-        <new-answer @answer-created="updateAnswers" :topic-id="topic.id"></new-answer>
+        <div v-if="edit == false">
+            <answers :answers="answers" :answers-count="answersCount"></answers>
+            <new-answer @answer-created="newAnswerCreated" :topic-id="topic.id"></new-answer>
+        </div>
     </div>
 
 </template>
@@ -31,21 +49,61 @@
 import Answers from "./Answers";
 import Vote from "./Vote";
 import NewAnswer from "./NewAnswer";
+import EditTopic from "./EditTopic";
 
 export default {
-    components: {Vote, Answers, NewAnswer},
+    components: {Vote, Answers, NewAnswer, EditTopic},
     props: ['topic'],
     data() {
         return {
             answers: this.topic.answers,
-            answersCount: this.topic.answers_count
+            answersCount: this.topic.answers_count,
+            edit: false
         }
     },
     methods: {
-        updateAnswers(answer) {
+        newAnswerCreated(answer) {
             this.answers.push(answer);
             this.answersCount++;
+        },
+        topicUpdated(topic) {
+            this.edit = !this.edit;
+            this.topic = topic;
+        },
+        destroy() {
+            this.$toast.question('Are you sure?','Confirm', {
+                timeout: 20000,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 999,
+                title: 'Hey',
+                position: 'center',
+                buttons: [
+                    ['<button><b>YES</b></button>', (instance, toast) => {
+                        this.deleteTopic();
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                    }, true],
+                    ['<button>NO</button>', function (instance, toast) {
+
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                    }],
+                ],
+            });
+        },
+
+        deleteTopic() {
+            axios.delete(`/api/topics/${this.topic.id}`)
+                .then(res => {
+                    this.$toast.success('Topic deleted successfully.', 'Success!');
+                    setTimeout(() => window.location.href = '/', 2000)
+                })
+                .catch(err => {});
         }
+
     }
 }
 </script>
@@ -53,7 +111,7 @@ export default {
 <style>
 .topic-widget {
     text-align: center;
-    width: 150px;
+    width: 100px;
     margin-right: 20px;
     padding: 0 15px;
 }

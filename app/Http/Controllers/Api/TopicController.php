@@ -43,5 +43,17 @@ class TopicController extends Controller
         return $topic->load('user', 'answers');
     }
 
+    public function update(CreateTopicRequest $request, Topic $topic)
+    {
+        $topic->update($request->validated());
+
+        return $topic->load('user', 'answers');
+    }
+
+    public function destroy(Topic $topic)
+    {
+        $topic->delete();
+    }
+
 
 }
