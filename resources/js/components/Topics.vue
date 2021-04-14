@@ -1,10 +1,13 @@
 <template>
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h4>{{ createTopic ? 'Create Topic' : 'Topics' }}</h4>
-            <button @click="toggleTopicForm" class="btn btn-outline-primary">
-                {{ createTopic ? 'Back' : 'Create Topic' }}
-            </button>
+            {{ createTopic ? "Create Topic" : '' }}
+            <sort v-if="!createTopic" @sort="sortTopics"></sort>
+            <div>
+                <button @click="toggleTopicForm" class="btn btn-outline-primary">
+                    {{ createTopic ? 'Back' : 'Create Topic' }}
+                </button>
+            </div>
         </div>
 
         <new-topic @topic-created="topicCreated" v-if="createTopic"></new-topic>
@@ -32,34 +35,41 @@
 
 <script>
 import NewTopic from "./NewTopic";
+import Sort from "./Sort";
 import eventBus from "../event-bus";
 
 export default {
-    components: { NewTopic },
+    components: { NewTopic, Sort },
     data() {
         return {
             topics: [],
             createTopic: false,
+            category_id: '',
+            url: `/api/topics`
         };
     },
     created() {
-        axios.get('/api/topics')
-        .then(res => {
-            this.topics = res.data;
-        })
-        .catch(err => {
-        })
+        this.sortTopics();
 
         eventBus.$on('changeCategory', id => {
-            axios.get(`/api/categories/${id}`)
+            this.category_id = id;
+            this.url = `/api/topics?category_id=${this.category_id}`
+            this.sortTopics();
+        });
+    },
+    methods: {
+        getTopics() {
+            axios.get(this.url)
                 .then(res => {
-                    this.topics = res.data.topics;
+                    this.topics = res.data;
                 })
                 .catch(err => {
                 })
-        })
-    },
-    methods: {
+        },
+        sortTopics(field = 'date', direction = 'desc') {
+            this.url = `/api/topics?sort_field=${field}&direction=${direction}&category_id=${this.category_id}`;
+            this.getTopics()
+        },
         toggleTopicForm() {
             this.createTopic = !this.createTopic;
             this.$emit('new-topic', ! this.createTopic);
@@ -67,7 +77,7 @@ export default {
         topicCreated(topic) {
             this.toggleTopicForm()
             this.topics.unshift(topic);
-        }
+        },
     }
 }
 </script>

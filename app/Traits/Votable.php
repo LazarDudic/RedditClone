@@ -12,6 +12,6 @@ trait Votable
 
     public function getVotesSumAttribute()
     {
-        return $this->votes()->sum('vote');
+        return (int) $this->votes()->sum('vote');
     }
 }

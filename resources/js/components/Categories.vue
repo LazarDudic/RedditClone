@@ -1,6 +1,7 @@
 <template>
     <div class="text-center">
         <ul>
+            <li><a @click.prevent="showCategory('')" class="btn">All Categories</a></li>
             <li v-for="category in categories" :key="category.id">
                 <a @click.prevent="showCategory(category.id)" class="btn">
                     {{ category.name }}

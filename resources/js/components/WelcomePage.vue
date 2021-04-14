@@ -1,11 +1,11 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div v-if="showCategories" class="col-md-4">
+            <div v-if="showSidebar" class="col-md-4">
                 <categories></categories>
             </div>
             <div class="col-md-8">
-                <topics @new-topic="toggleCategories"></topics>
+                <topics @new-topic="toggleSidebar"></topics>
             </div>
         </div>
     </div>
@@ -19,12 +19,12 @@ export default {
     components: {Categories, Topics},
     data() {
         return {
-            showCategories: true
+            showSidebar: true
         };
     },
     methods: {
-        toggleCategories(showCategories) {
-            this.showCategories = showCategories;
+        toggleSidebar(showSidebar) {
+            this.showSidebar = showSidebar;
         }
     }
 }

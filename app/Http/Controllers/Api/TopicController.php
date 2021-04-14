@@ -10,11 +10,18 @@ use App\Http\Requests\CreateTopicRequest;
 
 class TopicController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Topic::with(['answers', 'user'])
+        $categoryId = $request->category_id;
+
+        $topics = Topic::with(['answers', 'user'])
+            ->when($categoryId, function($q, $categoryId) {
+                 return $q->where('category_id', $categoryId);
+             })
             ->latest()
             ->get();
+
+        return $this->sortTopics($topics, $request->sort_field, $request->direction);
     }
 
     public function show(Topic $topic)
@@ -55,5 +62,23 @@ class TopicController extends Controller
         $topic->delete();
     }
 
+    public function sortTopics($topics, $field, $direction)
+    {
+            if ($direction === 'asc') {
+                $sorted = $topics->sortBy(function($topic) use ($field) {
+                    return $topic->$field;
+                });
+
+                return $sorted->values()->all();
+            } else if ('asc') {
+                $sorted = $topics->sortByDesc(function($topic) use ($field) {
+                    return $topic->$field;
+                });
+
+                return $sorted->values()->all();
+            }
+
+            return $topics;
+    }
 
 }
