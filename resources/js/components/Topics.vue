@@ -9,7 +9,7 @@
                 </button>
             </div>
         </div>
-
+        <!-- New Topic Component -->
         <new-topic @topic-created="topicCreated" v-if="createTopic"></new-topic>
 
         <div v-else>
@@ -34,9 +34,6 @@
                 </button>
             </div>
         </div>
-
-
-
     </div>
 </template>
 

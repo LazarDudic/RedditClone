@@ -10,6 +10,11 @@ use App\Models\Topic;
 
 class AnswerController extends Controller
 {
+    public function index()
+    {
+        return Answer::with(['user', 'topic'])->get();
+    }
+
     public function store(Request $request, Topic $topic)
     {
         $answer = $topic->answers()->create($request->only('body', 'user_id'));
@@ -27,5 +32,20 @@ class AnswerController extends Controller
         ]);
 
         return $answer->refresh();
+    }
+
+    public function best(Answer $answer)
+    {
+        $oldBestAnswer = Answer::where('topic_id', $answer->topic_id)
+            ->where('best_answer', true)
+            ->first();
+
+        if ($oldBestAnswer) {
+            $oldBestAnswer->best_answer = false;
+            $oldBestAnswer->save();
+        }
+
+        $answer->best_answer = true;
+        $answer->save();
     }
 }

@@ -20,7 +20,7 @@
                         <vote :model="topic" :name="'topic'"></vote>
                         <span class="text-secondary">Views {{ topic.views }}</span>
                     </div>
-                    <div>
+                    <div class="w-100">
                         <h4>{{ topic.title }}</h4>
                         <p>{{ topic.body }}</p>
                         <div class="d-flex justify-content-between">
@@ -38,7 +38,9 @@
             </div>
         </div>
         <div v-if="!edit">
+            <!-- Answers Component -->
             <answers :answers="answers" :answers-count="answersCount"></answers>
+            <!-- New Answer Component -->
             <new-answer @answer-created="newAnswerCreated" :topic-id="topic.id"></new-answer>
         </div>
     </div>
@@ -56,6 +58,7 @@ export default {
     props: ['topic'],
     data() {
         return {
+            mutableTopic: this.topic,
             answers: this.topic.answers,
             answersCount: this.topic.answers_count,
             edit: false
@@ -67,6 +70,15 @@ export default {
         }
     },
     methods: {
+         refreshTopicData() {
+             axios.get(`/api/topics/${this.topic.id}`)
+                .then(res => {
+                    this.mutableTopic = res.data;
+                    this.user = res.data.user;
+                    this.answers = res.data.answers;
+                    this.answersCount = res.data.answers_count;
+                });
+        },
         newAnswerCreated(answer) {
             this.answers.push(answer);
             this.answersCount++;
