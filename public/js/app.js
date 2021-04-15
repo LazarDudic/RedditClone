@@ -2323,7 +2323,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     authenticated: function authenticated() {
-      return this.topic.user_id === window.authUser.id;
+      var _window$authUser;
+
+      return this.topic.user_id === ((_window$authUser = window.authUser) === null || _window$authUser === void 0 ? void 0 : _window$authUser.id);
     }
   },
   methods: {

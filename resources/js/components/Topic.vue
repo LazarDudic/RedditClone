@@ -63,7 +63,7 @@ export default {
     },
     computed: {
         authenticated() {
-            return this.topic.user_id === window.authUser.id
+            return this.topic.user_id === window.authUser?.id
         }
     },
     methods: {
