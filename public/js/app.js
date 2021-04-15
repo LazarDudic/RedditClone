@@ -1868,12 +1868,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Vote: _Vote__WEBPACK_IMPORTED_MODULE_0__.default
   },
-  props: ['answers', 'answersCount']
+  props: ['answers', 'answersCount'],
+  data: function data() {
+    return {
+      paginate: 5
+    };
+  },
+  computed: {
+    showAnswers: function showAnswers() {
+      var _this = this;
+
+      return this.answers.filter(function (answer, index) {
+        return index < _this.paginate;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -2392,6 +2411,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _NewTopic__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewTopic */ "./resources/js/components/NewTopic.vue");
 /* harmony import */ var _Sort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sort */ "./resources/js/components/Sort.vue");
 /* harmony import */ var _event_bus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../event-bus */ "./resources/js/event-bus.js");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39269,7 +39295,7 @@ var render = function() {
           _vm._v("Answers (" + _vm._s(_vm.answersCount) + ")")
         ]),
         _vm._v(" "),
-        _vm._l(_vm.answers, function(answer) {
+        _vm._l(_vm.showAnswers, function(answer) {
           return _c("div", { staticClass: "card-body d-flex" }, [
             _c(
               "div",
@@ -39288,7 +39314,25 @@ var render = function() {
               ])
             ])
           ])
-        })
+        }),
+        _vm._v(" "),
+        _vm.paginate < _vm.answers.length
+          ? _c("div", { staticClass: "text-center p-2" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-secondary",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.paginate += 5
+                    }
+                  }
+                },
+                [_vm._v("\n                Load More\n            ")]
+              )
+            ])
+          : _vm._e()
       ],
       2
     )
@@ -39996,7 +40040,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm.edit == false
+    !_vm.edit
       ? _c(
           "div",
           [
@@ -40078,56 +40122,76 @@ var render = function() {
         ? _c("new-topic", { on: { "topic-created": _vm.topicCreated } })
         : _c(
             "div",
-            _vm._l(_vm.showTopics, function(topic) {
-              return _c(
-                "div",
-                { key: topic.id, staticClass: "card-body d-flex w-100 pb-0" },
-                [
-                  _c("div", { staticClass: "topic-widget" }, [
-                    _c("p", [
-                      _vm._v(_vm._s(topic.votes_sum) + " "),
-                      _c("br"),
-                      _c("span", [_vm._v("Votes")])
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(_vm._s(topic.answers_count) + " "),
-                      _c("br"),
-                      _c("span", [_vm._v("Answers")])
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(_vm._s(topic.views) + " "),
-                      _c("br"),
-                      _c("span", [_vm._v("Views")])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "w-100" }, [
-                    _c("h4", [
-                      _c("a", { attrs: { href: "topics/" + topic.id } }, [
-                        _vm._v(_vm._s(topic.title))
+            [
+              _vm._l(_vm.showTopics, function(topic) {
+                return _c(
+                  "div",
+                  { key: topic.id, staticClass: "card-body d-flex w-100 pb-0" },
+                  [
+                    _c("div", { staticClass: "topic-widget" }, [
+                      _c("p", [
+                        _vm._v(_vm._s(topic.votes_sum) + " "),
+                        _c("br"),
+                        _c("span", [_vm._v("Votes")])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(_vm._s(topic.answers_count) + " "),
+                        _c("br"),
+                        _c("span", [_vm._v("Answers")])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(_vm._s(topic.views) + " "),
+                        _c("br"),
+                        _c("span", [_vm._v("Views")])
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("p", { staticClass: "topics-body" }, [
-                      _vm._v(_vm._s(topic.body.substr(0, 100)) + "...")
-                    ]),
-                    _vm._v(" "),
+                    _c("div", { staticClass: "w-100" }, [
+                      _c("h4", [
+                        _c("a", { attrs: { href: "topics/" + topic.id } }, [
+                          _vm._v(_vm._s(topic.title))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "topics-body" }, [
+                        _vm._v(_vm._s(topic.body.substr(0, 100)) + "...")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "d-flex justify-content-between" },
+                        [
+                          _c("p", [_vm._v("by " + _vm._s(topic.user.name))]),
+                          _vm._v(" "),
+                          _c("p", [_vm._v(" " + _vm._s(topic.created_at))])
+                        ]
+                      )
+                    ])
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _vm.paginate < _vm.topics.length
+                ? _c("div", { staticClass: "text-center p-2" }, [
                     _c(
-                      "div",
-                      { staticClass: "d-flex justify-content-between" },
-                      [
-                        _c("p", [_vm._v("by " + _vm._s(topic.user.name))]),
-                        _vm._v(" "),
-                        _c("p", [_vm._v(" " + _vm._s(topic.created_at))])
-                      ]
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-secondary",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.paginate += 5
+                          }
+                        }
+                      },
+                      [_vm._v("\n                Load More\n            ")]
                     )
                   ])
-                ]
-              )
-            }),
-            0
+                : _vm._e()
+            ],
+            2
           )
     ],
     1

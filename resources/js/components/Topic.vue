@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="edit == false">
+        <div v-if="!edit">
             <answers :answers="answers" :answers-count="answersCount"></answers>
             <new-answer @answer-created="newAnswerCreated" :topic-id="topic.id"></new-answer>
         </div>

@@ -28,7 +28,14 @@
                     </div>
                 </div>
             </div>
+            <div v-if="paginate < topics.length" class="text-center p-2">
+                <button @click.prevent="paginate += 5" class="btn btn-outline-secondary">
+                    Load More
+                </button>
+            </div>
         </div>
+
+
 
     </div>
 </template>
@@ -58,7 +65,6 @@ export default {
     },
     created() {
         this.sortTopics();
-
         eventBus.$on('changeCategory', id => {
             this.category_id = id;
             this.sortTopics();
