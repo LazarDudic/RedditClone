@@ -11,7 +11,7 @@
 import eventBus from "../event-bus";
 
 export default {
-    props: ['answer'],
+    props: ['answer', 'topic'],
     data() {
         return {
             isBest: this.answer.best_answer,
@@ -25,7 +25,7 @@ export default {
     methods: {
         create() {
             if (this.isBest) { return; }
-            if (this.answer.user_id !== window.authUser?.id) { return; }
+            if (this.topic.user_id !== window.authUser?.id) { return; }
 
             axios.post(`/api/answers/${this.answer.id}/best`)
             .then(res => {

@@ -1886,9 +1886,10 @@ __webpack_require__.r(__webpack_exports__);
     Vote: _Vote__WEBPACK_IMPORTED_MODULE_0__.default,
     BestAnswer: _BestAnswer__WEBPACK_IMPORTED_MODULE_1__.default
   },
-  props: ['answers', 'answersCount'],
+  props: ['topic', 'answersCount'],
   data: function data() {
     return {
+      answers: this.topic.answers,
       paginate: 5,
       bestAnswer: null
     };
@@ -1904,8 +1905,10 @@ __webpack_require__.r(__webpack_exports__);
     showAnswers: function showAnswers() {
       var _this2 = this;
 
-      var answersSetBestAnswerFirst = _.orderBy(this.answers, ['best_answer', 'created_at'], ['desc', 'asc']);
+      var answersSetBestAnswerFirst = _.orderBy(this.topic.answers, ['best_answer', 'created_at'], ['desc', 'asc']);
 
+      console.log(this.topic.answers);
+      console.log(answersSetBestAnswerFirst);
       return answersSetBestAnswerFirst.filter(function (answer, index) {
         return index < _this2.paginate;
       });
@@ -1914,14 +1917,14 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     classes: function classes(answer) {
       if (this.bestAnswer === answer.id) {
-        return 'best-answer card-body d-flex';
+        return 'best-answer card-body d-flex answers';
       }
 
       if (!this.bestAnswer && answer.best_answer) {
-        return 'best-answer card-body d-flex';
+        return 'best-answer card-body d-flex answers';
       }
 
-      return 'card-body d-flex';
+      return 'card-body d-flex answers';
     }
   }
 });
@@ -1951,7 +1954,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['answer'],
+  props: ['answer', 'topic'],
   data: function data() {
     return {
       isBest: this.answer.best_answer
@@ -1973,7 +1976,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.answer.user_id !== ((_window$authUser = window.authUser) === null || _window$authUser === void 0 ? void 0 : _window$authUser.id)) {
+      if (this.topic.user_id !== ((_window$authUser = window.authUser) === null || _window$authUser === void 0 ? void 0 : _window$authUser.id)) {
         return;
       }
 
@@ -7296,7 +7299,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.topic-widget[data-v-7410c14c] {\n    text-align: start;\n    width: 60px;\n}\n.best-answer[data-v-7410c14c] {\n    background: #b3ffd3;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.topic-widget[data-v-7410c14c] {\n    text-align: start;\n    width: 60px;\n}\n.answers[data-v-7410c14c] {\n    border-bottom: 1px solid #c4c4c4;\n    padding: 5px;\n    position: relative;\n    width: 100%;\n}\n.answers-under-body[data-v-7410c14c] {\n    position: absolute;\n    bottom: 1px;\n    font-size: 0.8rem;\n    display: flex;\n    justify-content: space-between;\n    width: 70%;\n}\n.best-answer[data-v-7410c14c] {\n    transition: 2s background;\n    background: #b6faa8;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39519,15 +39522,17 @@ var render = function() {
               [
                 _c("vote", { attrs: { model: answer, name: "answer" } }),
                 _vm._v(" "),
-                _c("best-answer", { attrs: { answer: answer } })
+                _c("best-answer", {
+                  attrs: { answer: answer, topic: _vm.topic }
+                })
               ],
               1
             ),
             _vm._v(" "),
             _c("div", { staticClass: "w-100" }, [
-              _c("p", [_vm._v(_vm._s(answer.body))]),
+              _c("p", { staticClass: "mt-3" }, [_vm._v(_vm._s(answer.body))]),
               _vm._v(" "),
-              _c("div", { staticClass: "d-flex justify-content-between" }, [
+              _c("div", { staticClass: "answers-under-body" }, [
                 _c("p", [_vm._v("by " + _vm._s(answer.user.name))]),
                 _vm._v(" "),
                 _c("p", [_vm._v(" " + _vm._s(answer.created_at))])
@@ -40307,7 +40312,7 @@ var render = function() {
           "div",
           [
             _c("answers", {
-              attrs: { answers: _vm.answers, "answers-count": _vm.answersCount }
+              attrs: { topic: _vm.topic, "answers-count": _vm.answersCount }
             }),
             _vm._v(" "),
             _c("new-answer", {

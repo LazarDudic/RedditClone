@@ -39,7 +39,7 @@
         </div>
         <div v-if="!edit">
             <!-- Answers Component -->
-            <answers :answers="answers" :answers-count="answersCount"></answers>
+            <answers :topic="topic" :answers-count="answersCount"></answers>
             <!-- New Answer Component -->
             <new-answer @answer-created="newAnswerCreated" :topic-id="topic.id"></new-answer>
         </div>

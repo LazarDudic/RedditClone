@@ -16,6 +16,10 @@ class Answer extends Model
         'topic_id'
     ];
 
+    protected $attributes = [
+        'best_answer' => false
+    ];
+
     protected $appends = ['votes_sum'];
 
     protected $casts = [

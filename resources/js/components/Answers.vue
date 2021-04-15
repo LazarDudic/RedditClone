@@ -8,11 +8,11 @@
                     <!-- Vote Component -->
                     <vote :model="answer" :name="'answer'"></vote>
                     <!-- Best Answer Component -->
-                    <best-answer :answer="answer"></best-answer>
+                    <best-answer :answer="answer" :topic="topic"></best-answer>
                 </div>
                 <div class="w-100">
-                    <p>{{ answer.body }}</p>
-                    <div class="d-flex justify-content-between">
+                    <p class="mt-3">{{ answer.body }}</p>
+                    <div class="answers-under-body">
                         <p>by {{ answer.user.name }}</p>
                         <p> {{ answer.created_at }}</p>
                     </div>
@@ -35,9 +35,10 @@ import eventBus from "../event-bus";
 
 export default {
     components: {Vote, BestAnswer},
-    props: ['answers', 'answersCount'],
+    props: ['topic', 'answersCount'],
     data() {
         return {
+            answers: this.topic.answers,
             paginate: 5,
             bestAnswer: null,
         };
@@ -49,7 +50,11 @@ export default {
     },
     computed: {
         showAnswers() {
-            let answersSetBestAnswerFirst = _.orderBy(this.answers, ['best_answer', 'created_at'], ['desc', 'asc']);
+            let answersSetBestAnswerFirst = _.orderBy(this.topic.answers, ['best_answer', 'created_at'], ['desc',
+                'asc']);
+            console.log(this.topic.answers)
+            console.log(answersSetBestAnswerFirst)
+
             return answersSetBestAnswerFirst.filter((answer, index) => {
                 return index < this.paginate;
             });
@@ -58,12 +63,12 @@ export default {
     methods: {
         classes(answer) {
             if (this.bestAnswer === answer.id) {
-                return 'best-answer card-body d-flex';
+                return 'best-answer card-body d-flex answers';
             }
             if (! this.bestAnswer && answer.best_answer) {
-                return 'best-answer card-body d-flex';
+                return 'best-answer card-body d-flex answers';
             }
-            return 'card-body d-flex';
+            return 'card-body d-flex answers';
         }
     }
 }
@@ -75,7 +80,23 @@ export default {
     text-align: start;
     width: 60px;
 }
+.answers {
+    border-bottom: 1px solid #c4c4c4;
+    padding: 5px;
+    position: relative;
+    width: 100%;
+}
+
+.answers-under-body {
+    position: absolute;
+    bottom: 1px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+}
 .best-answer {
-    background: #b3ffd3;
+    transition: 2s background;
+    background: #b6faa8;
 }
 </style>
