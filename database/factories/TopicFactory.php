@@ -38,7 +38,7 @@ class TopicFactory extends Factory
             'body' => $this->faker->paragraph(rand(1,5)),
             'views' => rand(0, 1000),
             'category_id' => rand(1, 7),
-            'user_id' => rand(1,3),
+            'user_id' => rand(1,2),
             'created_at' => Carbon::now()->subDays(rand(1,50))->subMinutes(rand(1, 400))
         ];
     }
