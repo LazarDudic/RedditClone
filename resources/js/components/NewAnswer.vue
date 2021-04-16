@@ -46,6 +46,7 @@ export default {
             })
             .then(res => {
                 this.$emit('answer-created', res.data);
+                this.$toast.success('Answer created successfully.', 'Success!')
                 this.error = '';
                 this.body = '';
             })

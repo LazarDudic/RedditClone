@@ -2187,6 +2187,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this.$emit('answer-created', res.data);
 
+        _this.$toast.success('Answer created successfully.', 'Success!');
+
         _this.error = '';
         _this.body = '';
       })["catch"](function (err) {});
