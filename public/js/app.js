@@ -1957,8 +1957,15 @@ __webpack_require__.r(__webpack_exports__);
   props: ['answer', 'topic'],
   data: function data() {
     return {
-      isBest: this.answer.best_answer
+      isBest: this.answer.best_answer === 1
     };
+  },
+  computed: {
+    authorized: function authorized() {
+      var _window$authUser;
+
+      return this.isBest || this.topic.user_id === ((_window$authUser = window.authUser) === null || _window$authUser === void 0 ? void 0 : _window$authUser.id);
+    }
   },
   created: function created() {
     var _this = this;
@@ -1969,14 +1976,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     create: function create() {
-      var _window$authUser,
+      var _window$authUser2,
           _this2 = this;
 
       if (this.isBest) {
         return;
       }
 
-      if (this.topic.user_id !== ((_window$authUser = window.authUser) === null || _window$authUser === void 0 ? void 0 : _window$authUser.id)) {
+      if (this.topic.user_id !== ((_window$authUser2 = window.authUser) === null || _window$authUser2 === void 0 ? void 0 : _window$authUser2.id)) {
         return;
       }
 
@@ -39530,7 +39537,9 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("div", { staticClass: "w-100" }, [
-              _c("p", { staticClass: "mt-3" }, [_vm._v(_vm._s(answer.body))]),
+              _c("p", { staticClass: "mt-3 pb-4" }, [
+                _vm._v(_vm._s(answer.body))
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "answers-under-body" }, [
                 _c("p", [_vm._v("by " + _vm._s(answer.user.name))]),
@@ -39586,24 +39595,26 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "a",
-      {
-        on: {
-          click: function($event) {
-            $event.preventDefault()
-            return _vm.create($event)
-          }
-        }
-      },
-      [
-        _vm.isBest
-          ? _c("i", { staticClass: "fas fa-check text-success" })
-          : _c("i", { staticClass: "fas fa-check text-secondary" })
-      ]
-    )
-  ])
+  return _vm.authorized
+    ? _c("div", [
+        _c(
+          "a",
+          {
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.create($event)
+              }
+            }
+          },
+          [
+            _vm.isBest
+              ? _c("i", { staticClass: "fas fa-check text-success" })
+              : _c("i", { staticClass: "fas fa-check text-secondary" })
+          ]
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
