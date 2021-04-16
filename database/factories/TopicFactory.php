@@ -6,6 +6,7 @@ use App\Models\Topic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 use App\Models\Vote;
+use App\Models\Answer;
 
 class TopicFactory extends Factory
 {
@@ -24,6 +25,10 @@ class TopicFactory extends Factory
                 'topic_id' => $topic->id,
                 'user_id' => rand(2,3)
             ]);
+            Answer::factory([
+                'best_answer' => true,
+                'topic_id' => $topic->id
+            ])->create();
         });
     }
     /**

@@ -23,6 +23,7 @@ class AnswerFactory extends Factory
     {
         return [
             'body' => $this->faker->paragraph(rand(1,5)),
+            'best_answer' => false,
             'topic_id' => rand(1,40),
             'user_id' => rand(1,3)
         ];

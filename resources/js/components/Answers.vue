@@ -11,7 +11,7 @@
                     <best-answer :answer="answer" :topic="topic"></best-answer>
                 </div>
                 <div class="w-100">
-                    <p class="mt-3">{{ answer.body }}</p>
+                    <p class="mt-3 pb-4">{{ answer.body }}</p>
                     <div class="answers-under-body">
                         <p>by {{ answer.user.name }}</p>
                         <p> {{ answer.created_at }}</p>
